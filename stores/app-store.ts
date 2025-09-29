@@ -30,15 +30,6 @@ const mockCakes: Cake[] = [
         image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400',
         available: true,
         category: 'Fruit'
-    },
-    {
-        id: '4',
-        name: 'Red Velvet',
-        description: 'Classic red velvet with cream cheese frosting',
-        price: 26.99,
-        image: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400',
-        available: false,
-        category: 'Special'
     }
 ];
 
