@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Plus, Search, Grid, List } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { theme } from '@/constants/theme';
@@ -7,6 +8,7 @@ import { CakeCard } from '@/components/CakeCard';
 import { useAppStore } from '@/stores/app-store';
 
 export default function MenuScreen() {
+    const insets = useSafeAreaInsets();
     const { cakes, deleteCake, reservations } = useAppStore();
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [searchQuery, setSearchQuery] = useState('');
@@ -84,7 +86,7 @@ export default function MenuScreen() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <View style={[styles.header, { paddingTop: insets.top + theme.spacing.md }]}>
                 <Text style={styles.title}>Cake Menu</Text>
                 <View style={styles.headerActions}>
                     <TouchableOpacity

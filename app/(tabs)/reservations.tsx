@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Filter, Search } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { theme } from '@/constants/theme';
@@ -8,6 +8,7 @@ import { ReservationCard } from '@/components/ReservationCard';
 import { useAppStore } from '@/stores/app-store';
 
 export default function ReservationsScreen() {
+    const insets = useSafeAreaInsets();
     const { reservations, getReservationWithCake } = useAppStore();
     const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'canceled'>('all');
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,7 +56,7 @@ export default function ReservationsScreen() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
+            <View style={[styles.header, { paddingTop: insets.top + theme.spacing.md }]}>
                 <Text style={styles.title}>Reservations</Text>
                 <View style={styles.headerActions}>
                     <TouchableOpacity
