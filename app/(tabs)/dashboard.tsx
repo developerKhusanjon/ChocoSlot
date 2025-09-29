@@ -48,8 +48,8 @@ export default function DashboardScreen() {
             >
                 <View style={styles.headerContent}>
                     <View>
-                        <Text style={styles.greeting}>Good morning!</Text>
-                        <Text style={styles.title}>ChocoSlot Dashboard</Text>
+                        <Text style={styles.greeting}>Good day!</Text>
+                        <Text style={styles.title}>Dishly Dashboard</Text>
                     </View>
                     <TouchableOpacity
                         style={styles.addButton}

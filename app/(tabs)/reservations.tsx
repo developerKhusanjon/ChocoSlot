@@ -127,7 +127,7 @@ export default function ReservationsScreen() {
                             {searchQuery.trim()
                                 ? "No reservations match your search criteria. Try adjusting your search terms."
                                 : filter === 'all'
-                                    ? "You don&apos;t have any reservations yet."
+                                    ? "You don't have any reservations yet."
                                     : `No ${filter} reservations at the moment.`
                             }
                         </Text>

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Home, Calendar, Plus, ChefHat } from "lucide-react-native";
+import { Home, Calendar, Info, ChefHat } from "lucide-react-native";
 import React from "react";
 import { theme } from "@/constants/theme";
 
@@ -17,7 +17,8 @@ export default function TabLayout() {
                 },
                 tabBarLabelStyle: {
                     fontSize: 9,
-                    fontWeight: '500'
+                    fontWeight: '500' as const,
+                    marginTop: -2
                 }
             }}
         >
@@ -25,14 +26,14 @@ export default function TabLayout() {
                 name="dashboard"
                 options={{
                     title: "Dashboard",
-                    tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => <Home color={color} size={size} />
                 }}
             />
             <Tabs.Screen
                 name="reservations"
                 options={{
                     title: "Reservations",
-                    tabBarIcon: ({ color, size }) => <Calendar color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => <Calendar color={color} size={size} />
                 }}
             />
             <Tabs.Screen
@@ -45,7 +46,7 @@ export default function TabLayout() {
                 name="menu"
                 options={{
                     title: "Menu",
-                    tabBarIcon: ({ color, size }) => <ChefHat color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => <ChefHat color={color} size={size} />
                 }}
             />
         </Tabs>

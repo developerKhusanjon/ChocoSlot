@@ -176,6 +176,27 @@ export const [AppProvider, useAppStore] = createContextHook(() => {
         return () => clearInterval(interval);
     }, []);
 
+    // Auto-remove cakes with 'remove-from-stock' status after 3 minutes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const now = new Date();
+            setCakes(prev => {
+                const filtered = prev.filter(cake => {
+                    if (cake.status === 'removing-from-stock' && cake.statusUpdatedAt) {
+                        const statusTime = new Date(cake.statusUpdatedAt);
+                        const timeDiff = now.getTime() - statusTime.getTime();
+                        const minutesDiff = timeDiff / (1000 * 60);
+                        return minutesDiff < 3; // Keep if less than 3 minutes
+                    }
+                    return true;
+                });
+                return filtered;
+            });
+        }, 30000); // Check every 30 seconds
+
+        return () => clearInterval(interval);
+    }, []);
+
     // Update daily stats when reservations change
     useEffect(() => {
         if (isLoaded) {

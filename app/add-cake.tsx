@@ -12,12 +12,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { Image } from 'expo-image';
-import { ImageIcon, DollarSign, FileText, Tag, Trash2, X, Grid } from 'lucide-react-native';
+import { ImageIcon, DollarSign, FileText, Tag, X, Grid, Clock } from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 import { useAppStore } from '@/stores/app-store';
 
 export default function AddCakeScreen() {
-    const { cakes, addCake, updateCake, deleteCake, reservations } = useAppStore();
+    const { cakes, addCake, updateCake, reservations } = useAppStore();
     const { id } = useLocalSearchParams<{ id?: string }>();
     const isEditing = !!id;
     const existingCake = isEditing ? cakes.find(c => c.id === id) : null;
@@ -28,7 +28,8 @@ export default function AddCakeScreen() {
         price: '',
         image: '',
         category: '',
-        available: true
+        available: true,
+        status: 'available' as 'available' | 'out-of-stock' | 'removing-from-stock'
     });
     const [showImageSelector, setShowImageSelector] = useState(false);
 
@@ -48,13 +49,22 @@ export default function AddCakeScreen() {
 
     useEffect(() => {
         if (existingCake) {
+            // Determine the correct status based on cake properties
+            let cakeStatus: 'available' | 'out-of-stock' | 'removing-from-stock' = 'available';
+            if (existingCake.status) {
+                cakeStatus = existingCake.status;
+            } else if (!existingCake.available) {
+                cakeStatus = 'out-of-stock';
+            }
+
             setFormData({
                 name: existingCake.name,
                 description: existingCake.description,
                 price: existingCake.price.toString(),
                 image: existingCake.image,
                 category: existingCake.category,
-                available: existingCake.available
+                available: existingCake.available,
+                status: cakeStatus
             });
         }
     }, [existingCake]);
@@ -87,7 +97,9 @@ export default function AddCakeScreen() {
             price: parseFloat(formData.price),
             image: formData.image.trim(),
             category: formData.category.trim(),
-            available: formData.available
+            available: formData.status === 'available',
+            status: formData.status,
+            statusUpdatedAt: formData.status === 'removing-from-stock' ? new Date().toISOString() : undefined
         };
 
         if (isEditing && existingCake) {
@@ -101,43 +113,17 @@ export default function AddCakeScreen() {
         router.back();
     };
 
-    const handleDelete = () => {
-        if (!existingCake) return;
-
-        // Check if cake has any reservations
-        const cakeReservations = reservations.filter(r => r.cakeId === existingCake.id);
-        if (cakeReservations.length > 0) {
-            Alert.alert(
-                'Cannot Delete Cake',
-                `This cake has ${cakeReservations.length} reservation(s) and cannot be deleted. Please complete or cancel all reservations first.`,
-                [{ text: 'OK' }]
-            );
-            return;
-        }
-
-        Alert.alert(
-            'Delete Cake',
-            'Are you sure you want to delete this cake? This action cannot be undone.',
-            [
-                { text: 'Keep Cake', style: 'cancel' },
-                {
-                    text: 'Delete Cake',
-                    style: 'destructive',
-                    onPress: () => {
-                        console.log('Deleting cake with ID:', existingCake.id);
-                        deleteCake(existingCake.id);
-                        router.back();
-                    }
-                }
-            ]
-        );
+    const canSetRemovingStatus = () => {
+        if (!existingCake) return false;
+        const cakeReservations = reservations.filter(r => r.cakeId === existingCake.id && r.status !== 'canceled');
+        return cakeReservations.length === 0;
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <Stack.Screen
                 options={{
-                    title: isEditing ? 'Edit Cake' : 'Add New Cake',
+                    title: isEditing ? 'Edit Food' : 'Add New Food',
                     headerStyle: { backgroundColor: theme.colors.surface },
                     headerTintColor: theme.colors.onSurface
                 }}
@@ -234,19 +220,19 @@ export default function AddCakeScreen() {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Availability</Text>
+                    <Text style={styles.sectionTitle}>Status</Text>
 
-                    <View style={styles.availabilityContainer}>
+                    <View style={styles.statusContainer}>
                         <TouchableOpacity
                             style={[
-                                styles.availabilityButton,
-                                formData.available && styles.availabilityButtonActive
+                                styles.statusButton,
+                                formData.status === 'available' && styles.statusButtonActive
                             ]}
-                            onPress={() => setFormData(prev => ({ ...prev, available: true }))}
+                            onPress={() => setFormData(prev => ({ ...prev, status: 'available' }))}
                         >
                             <Text style={[
-                                styles.availabilityButtonText,
-                                formData.available && styles.availabilityButtonTextActive
+                                styles.statusButtonText,
+                                formData.status === 'available' && styles.statusButtonTextActive
                             ]}>
                                 Available
                             </Text>
@@ -254,18 +240,40 @@ export default function AddCakeScreen() {
 
                         <TouchableOpacity
                             style={[
-                                styles.availabilityButton,
-                                !formData.available && styles.availabilityButtonActive
+                                styles.statusButton,
+                                styles.outOfStockButton,
+                                formData.status === 'out-of-stock' && styles.statusButtonActive
                             ]}
-                            onPress={() => setFormData(prev => ({ ...prev, available: false }))}
+                            onPress={() => setFormData(prev => ({ ...prev, status: 'out-of-stock' }))}
                         >
                             <Text style={[
-                                styles.availabilityButtonText,
-                                !formData.available && styles.availabilityButtonTextActive
+                                styles.statusButtonText,
+                                styles.outOfStockButtonText,
+                                formData.status === 'out-of-stock' && styles.statusButtonTextActive
                             ]}>
                                 Out of Stock
                             </Text>
                         </TouchableOpacity>
+
+                        {isEditing && existingCake && canSetRemovingStatus() && (
+                            <TouchableOpacity
+                                style={[
+                                    styles.statusButton,
+                                    styles.removeFromStockButton,
+                                    formData.status === 'removing-from-stock' && styles.statusButtonActive
+                                ]}
+                                onPress={() => setFormData(prev => ({ ...prev, status: 'removing-from-stock' }))}
+                            >
+                                <Clock size={16} color={formData.status === 'removing-from-stock' ? 'white' : '#DC2626'} />
+                                <Text style={[
+                                    styles.statusButtonText,
+                                    styles.removeFromStockButtonText,
+                                    formData.status === 'removing-from-stock' && styles.statusButtonTextActive
+                                ]}>
+                                    Removing from Stock
+                                </Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -314,16 +322,6 @@ export default function AddCakeScreen() {
             </Modal>
 
             <View style={styles.footer}>
-                {isEditing && (
-                    <TouchableOpacity
-                        style={styles.deleteButton}
-                        onPress={handleDelete}
-                    >
-                        <Trash2 size={16} color="white" />
-                        <Text style={styles.deleteButtonText}>Delete</Text>
-                    </TouchableOpacity>
-                )}
-
                 <TouchableOpacity
                     style={styles.cancelButton}
                     onPress={() => router.back()}
@@ -424,6 +422,33 @@ const styles = StyleSheet.create({
     availabilityButtonTextActive: {
         color: 'white'
     },
+    statusContainer: {
+        gap: theme.spacing.md
+    },
+    statusButton: {
+        paddingVertical: theme.spacing.md,
+        paddingHorizontal: theme.spacing.lg,
+        borderRadius: theme.borderRadius.md,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        backgroundColor: theme.colors.surface,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: theme.spacing.xs
+    },
+    statusButtonActive: {
+        backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primary
+    },
+    statusButtonText: {
+        fontSize: theme.fontSize.md,
+        fontWeight: theme.fontWeight.medium,
+        color: theme.colors.onSurfaceVariant
+    },
+    statusButtonTextActive: {
+        color: 'white'
+    },
     footer: {
         flexDirection: 'row',
         padding: theme.spacing.lg,
@@ -432,19 +457,25 @@ const styles = StyleSheet.create({
         borderTopColor: theme.colors.border,
         backgroundColor: theme.colors.surface
     },
-    deleteButton: {
+    removeFromStockButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: theme.colors.error || '#dc3545',
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.md,
-        borderRadius: theme.borderRadius.md,
+        justifyContent: 'center',
+        backgroundColor: '#DC2626',
+        borderColor: '#DC2626',
         gap: theme.spacing.xs
     },
-    deleteButtonText: {
+    removeFromStockButtonText: {
         fontSize: theme.fontSize.md,
         fontWeight: theme.fontWeight.semibold,
         color: 'white'
+    },
+    outOfStockButton: {
+        backgroundColor: '#FEF3C7',
+        borderColor: '#D97706'
+    },
+    outOfStockButtonText: {
+        color: '#D97706'
     },
     cancelButton: {
         flex: 1,

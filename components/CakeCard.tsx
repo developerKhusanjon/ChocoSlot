@@ -23,9 +23,11 @@ export function CakeCard({ cake, onPress, onMenuPress }: CakeCardProps) {
                 <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
                     <MoreVertical size={20} color={theme.colors.onSurface} />
                 </TouchableOpacity>
-                {!cake.available && (
+                {(!cake.available || cake.status === 'out-of-stock' || cake.status === 'removing-from-stock') && (
                     <View style={styles.unavailableOverlay}>
-                        <Text style={styles.unavailableText}>Out of Stock</Text>
+                        <Text style={styles.unavailableText}>
+                            {cake.status === 'removing-from-stock' ? 'Removing...' : 'Out of Stock'}
+                        </Text>
                     </View>
                 )}
             </View>
@@ -37,13 +39,23 @@ export function CakeCard({ cake, onPress, onMenuPress }: CakeCardProps) {
                     <Text style={styles.price}>${cake.price.toFixed(2)}</Text>
                     <View style={[
                         styles.availabilityBadge,
-                        { backgroundColor: cake.available ? theme.colors.cardGreen : theme.colors.cardPeach }
+                        {
+                            backgroundColor: cake.status === 'removing-from-stock' ? '#FEE2E2' :
+                                (cake.status === 'out-of-stock' || !cake.available) ? '#FEF3C7' :
+                                    theme.colors.cardGreen
+                        }
                     ]}>
                         <Text style={[
                             styles.availabilityText,
-                            { color: cake.available ? theme.colors.success : theme.colors.warning }
+                            {
+                                color: cake.status === 'removing-from-stock' ? '#DC2626' :
+                                    (cake.status === 'out-of-stock' || !cake.available) ? '#D97706' :
+                                        theme.colors.success
+                            }
                         ]}>
-                            {cake.available ? 'Available' : 'Out of Stock'}
+                            {cake.status === 'removing-from-stock' ? 'Removing...' :
+                                (cake.status === 'out-of-stock' || !cake.available) ? 'Out of Stock' :
+                                    'Available'}
                         </Text>
                     </View>
                 </View>

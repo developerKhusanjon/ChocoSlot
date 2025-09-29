@@ -20,4 +20,6 @@ export interface Cake {
     image: string;
     available: boolean;
     category: string;
+    status?: 'available' | 'out-of-stock' | 'removing-from-stock';
+    statusUpdatedAt?: string;
 }
