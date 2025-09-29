@@ -28,7 +28,7 @@ export default function InfoScreen() {
                         <Text style={styles.sectionTitle}>Adding New Reservations</Text>
                     </View>
                     <Text style={styles.sectionText}>
-                        Tap the + button in the Dashboard header to create new reservations. Fill in customer details, select a cake, and set pickup date and time. Reservation details can only be updated while the status is Pending. To make changes to an existing reservation, first set its status to Pending.
+                        Tap the + button in the Dashboard header to create new reservations. Fill in customer details, select a food, and set pickup date and time. Reservation details can only be updated while the status is Pending. To make changes to an existing reservation, first set its status to Pending.
                     </Text>
                 </View>
 
@@ -64,7 +64,7 @@ export default function InfoScreen() {
                         <Text style={styles.sectionTitle}>Removing Food from Menu</Text>
                     </View>
                     <Text style={styles.sectionText}>
-                        In the Menu tab, tap on any cake and set its status to &quot;Removing from Stock&quot; (only available for cakes with no active reservations).
+                        In the Menu tab, tap on any food and set its status to &quot;Removing from Stock&quot; (only available for foods with no active reservations).
                     </Text>
                     <View style={styles.importantNote}>
                         <Clock size={16} color={theme.colors.warning} />

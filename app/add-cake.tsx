@@ -71,11 +71,11 @@ export default function AddCakeScreen() {
 
     const handleSubmit = () => {
         if (!formData.name.trim()) {
-            Alert.alert('Error', 'Please enter cake name');
+            Alert.alert('Error', 'Please enter food name');
             return;
         }
         if (!formData.description.trim()) {
-            Alert.alert('Error', 'Please enter cake description');
+            Alert.alert('Error', 'Please enter food description');
             return;
         }
         if (!formData.price.trim() || isNaN(parseFloat(formData.price))) {
@@ -87,7 +87,7 @@ export default function AddCakeScreen() {
             return;
         }
         if (!formData.category.trim()) {
-            Alert.alert('Error', 'Please enter cake category');
+            Alert.alert('Error', 'Please enter food category');
             return;
         }
 
@@ -104,10 +104,10 @@ export default function AddCakeScreen() {
 
         if (isEditing && existingCake) {
             updateCake(existingCake.id, cakeData);
-            Alert.alert('Success', 'Cake updated successfully!');
+            Alert.alert('Success', 'Food updated successfully!');
         } else {
             addCake(cakeData);
-            Alert.alert('Success', 'Cake added successfully!');
+            Alert.alert('Success', 'Food added successfully!');
         }
 
         router.back();
@@ -138,7 +138,7 @@ export default function AddCakeScreen() {
                             <Tag size={20} color={theme.colors.onSurfaceVariant} />
                             <TextInput
                                 style={styles.input}
-                                placeholder="Cake Name"
+                                placeholder="Food Name"
                                 value={formData.name}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, name: text }))}
                                 placeholderTextColor={theme.colors.onSurfaceVariant}
@@ -334,7 +334,7 @@ export default function AddCakeScreen() {
                     onPress={handleSubmit}
                 >
                     <Text style={styles.submitButtonText}>
-                        {isEditing ? 'Update Cake' : 'Add Cake'}
+                        {isEditing ? 'Update Food' : 'Add Food'}
                     </Text>
                 </TouchableOpacity>
             </View>

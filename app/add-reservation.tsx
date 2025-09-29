@@ -57,7 +57,7 @@ export default function AddReservationScreen() {
             return;
         }
         if (!formData.cakeId) {
-            Alert.alert('Error', 'Please select a cake');
+            Alert.alert('Error', 'Please select food');
             return;
         }
 
@@ -127,7 +127,7 @@ export default function AddReservationScreen() {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Cake Selection</Text>
+                    <Text style={styles.sectionTitle}>Food Selection</Text>
 
                     <TouchableOpacity
                         style={[styles.cakeSelector, !canEdit && styles.selectorDisabled]}
@@ -147,7 +147,7 @@ export default function AddReservationScreen() {
                                 </View>
                             </View>
                         ) : (
-                            <Text style={styles.placeholderText}>Select a cake</Text>
+                            <Text style={styles.placeholderText}>Select food</Text>
                         )}
                         <ChevronDown size={20} color={theme.colors.onSurfaceVariant} />
                     </TouchableOpacity>
@@ -242,7 +242,7 @@ export default function AddReservationScreen() {
                         <MessageSquare size={20} color={theme.colors.onSurfaceVariant} />
                         <TextInput
                             style={[styles.notesInput, !canEdit && styles.inputDisabled]}
-                            placeholder="Special instructions, birthday message, etc."
+                            placeholder="Special instructions, notes, etc."
                             value={formData.notes}
                             onChangeText={(text) => setFormData(prev => ({ ...prev, notes: text }))}
                             placeholderTextColor={theme.colors.onSurfaceVariant}

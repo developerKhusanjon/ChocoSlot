@@ -14,17 +14,14 @@
   },
   "ios": {
     "supportsTablet": true,
-    "bundleIdentifier": "app.rork.cakecraft-offline-cake-recipe-app"
+    "bundleIdentifier": "app.dishly.dishly-food-reservation-manager"
   },
   "android": {
     "adaptiveIcon": {
       "foregroundImage": "./assets/images/adaptive-icon.png",
       "backgroundColor": "#ffffff"
     },
-    "package": "app.rork.cakecraft-offline-cake-recipe-app",
-    "permissions": [
-      "android.permission.VIBRATE"
-    ]
+    "package": "app.dishly.dishly-food-reservation-manager"
   },
   "web": {
     "favicon": "./assets/images/favicon.png"

@@ -30,7 +30,7 @@ function RootLayoutNav() {
                 name="add-cake"
                 options={{
                     presentation: "modal",
-                    title: "Add Cake"
+                    title: "Add Food"
                 }}
             />
             <Stack.Screen
@@ -42,7 +42,7 @@ function RootLayoutNav() {
             <Stack.Screen
                 name="cake/[id]"
                 options={{
-                    title: "Cake Details"
+                    title: "Food Details"
                 }}
             />
         </Stack>

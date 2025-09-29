@@ -116,7 +116,7 @@ export default function DashboardScreen() {
                             <Calendar size={48} color={theme.colors.onSurfaceVariant} />
                             <Text style={styles.emptyTitle}>No reservations today</Text>
                             <Text style={styles.emptyDescription}>
-                                All caught up! No cake pickups scheduled for today.
+                                All caught up! No food pickups scheduled for today.
                             </Text>
                         </View>
                     )}
