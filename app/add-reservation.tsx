@@ -137,7 +137,7 @@ export default function AddReservationScreen() {
                         {selectedCake ? (
                             <View style={styles.selectedCake}>
                                 <Image
-                                    source={{ uri: selectedCake.image }}
+                                    source={selectedCake.image}
                                     style={styles.cakeImage}
                                     contentFit="cover"
                                 />
@@ -164,7 +164,7 @@ export default function AddReservationScreen() {
                                     }}
                                 >
                                     <Image
-                                        source={{ uri: cake.image }}
+                                        source={cake.image}
                                         style={styles.cakeOptionImage}
                                         contentFit="cover"
                                     />

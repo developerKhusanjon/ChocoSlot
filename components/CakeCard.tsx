@@ -16,7 +16,7 @@ export function CakeCard({ cake, onPress, onMenuPress }: CakeCardProps) {
         <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: cake.image }}
+                    source={cake.image}
                     style={styles.image}
                     contentFit="cover"
                 />

@@ -35,16 +35,23 @@ export default function AddCakeScreen() {
 
     // Local cake images
     const localCakeImages = [
-        { id: '1', name: 'Chocolate Cake', url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400' },
-        { id: '2', name: 'Vanilla Cake', url: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400' },
-        { id: '3', name: 'Strawberry Cake', url: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400' },
-        { id: '4', name: 'Red Velvet', url: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=400' },
-        { id: '5', name: 'Carrot Cake', url: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400' },
-        { id: '6', name: 'Lemon Cake', url: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400' },
-        { id: '7', name: 'Cheesecake', url: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400' },
-        { id: '8', name: 'Black Forest', url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400' },
-        { id: '9', name: 'Tiramisu', url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400' },
-        { id: '10', name: 'Fruit Tart', url: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400' }
+        { id: '1', name: 'Bliss', url: require('@/assets/foods/bliss.jpeg') },
+        { id: '2', name: 'Burger', url: require('@/assets/foods/burger.jpg') },
+        { id: '3', name: 'Cap', url: require('@/assets/foods/cap.webp') },
+        { id: '4', name: 'Coffee', url: require('@/assets/foods/coffee.webp') },
+        { id: '5', name: 'Delight', url: require('@/assets/foods/delight.jpeg') },
+        { id: '6', name: 'Drink', url: require('@/assets/foods/drink.webp') },
+        { id: '7', name: 'Fast Food', url: require('@/assets/foods/fast.jpg') },
+        { id: '8', name: 'Food', url: require('@/assets/foods/fd.jpg') },
+        { id: '9', name: 'Free', url: require('@/assets/foods/fr.jpg') },
+        { id: '10', name: 'Hot Dog', url: require('@/assets/foods/hotd.jpg') },
+        { id: '11', name: 'Pizza', url: require('@/assets/foods/pizza.jpeg') },
+        { id: '12', name: 'Rice', url: require('@/assets/foods/rice.webp') },
+        { id: '13', name: 'Shaurma', url: require('@/assets/foods/shaurma.jpg') },
+        { id: '14', name: 'Spaghetti', url: require('@/assets/foods/spagh.jpg') },
+        { id: '15', name: 'Steak', url: require('@/assets/foods/steak.webp') },
+        { id: '16', name: 'Vanilla', url: require('@/assets/foods/vanilla.jpeg') },
+        { id: '17', name: 'Water', url: require('@/assets/foods/water.jpg') },
     ];
 
     useEffect(() => {
@@ -82,7 +89,7 @@ export default function AddCakeScreen() {
             Alert.alert('Error', 'Please enter a valid price');
             return;
         }
-        if (!formData.image.trim()) {
+        if (!formData.image) {
             Alert.alert('Error', 'Please enter image URL');
             return;
         }
@@ -95,7 +102,7 @@ export default function AddCakeScreen() {
             name: formData.name.trim(),
             description: formData.description.trim(),
             price: parseFloat(formData.price),
-            image: formData.image.trim(),
+            image: formData.image,
             category: formData.category.trim(),
             available: formData.status === 'available',
             status: formData.status,
@@ -174,7 +181,7 @@ export default function AddCakeScreen() {
                             <Tag size={20} color={theme.colors.onSurfaceVariant} />
                             <TextInput
                                 style={styles.input}
-                                placeholder="Category (e.g., Chocolate, Vanilla, Fruit)"
+                                placeholder="Category (e.g., Fast Food, Cake, Drink)"
                                 value={formData.category}
                                 onChangeText={(text) => setFormData(prev => ({ ...prev, category: text }))}
                                 placeholderTextColor={theme.colors.onSurfaceVariant}
@@ -194,24 +201,11 @@ export default function AddCakeScreen() {
                         <Text style={styles.imageSelectorText}>Choose from Gallery</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.inputContainer}>
-                        <ImageIcon size={20} color={theme.colors.onSurfaceVariant} />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Or enter custom image URL"
-                            value={formData.image}
-                            onChangeText={(text) => setFormData(prev => ({ ...prev, image: text }))}
-                            placeholderTextColor={theme.colors.onSurfaceVariant}
-                            multiline
-                            numberOfLines={2}
-                        />
-                    </View>
-
-                    {formData.image.trim() && (
+                    {formData.image && (
                         <View style={styles.imagePreview}>
                             <Text style={styles.previewLabel}>Preview:</Text>
                             <Image
-                                source={{ uri: formData.image }}
+                                source={formData.image}
                                 style={styles.previewImage}
                                 contentFit="cover"
                             />
@@ -308,7 +302,7 @@ export default function AddCakeScreen() {
                                         }}
                                     >
                                         <Image
-                                            source={{ uri: image.url }}
+                                            source={image.url}
                                             style={styles.imageOptionImage}
                                             contentFit="cover"
                                         />

@@ -33,7 +33,7 @@ export function ReservationCard({ reservation, cake, onPress }: ReservationCardP
                 <View style={styles.cakeInfo}>
                     {cake && (
                         <Image
-                            source={{ uri: cake.image }}
+                            source={cake.image}
                             style={styles.cakeImage}
                             contentFit="cover"
                         />
