@@ -3,7 +3,7 @@ export const theme = {
         primary: '#6B9BD1',
         secondary: '#F4A261',
         accent: '#E76F51',
-        success: '#2A9D8F',
+        success: '#37b3e1',
         warning: '#F4A261',
         error: '#E76F51',
         background: '#FEFEFE',
@@ -43,7 +43,7 @@ export const theme = {
         sm: 8,
         md: 12,
         lg: 16,
-        xl: 20,
+        xl: 30,
         full: 9999
     },
 

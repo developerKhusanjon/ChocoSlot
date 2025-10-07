@@ -7,8 +7,10 @@ import { theme } from '@/constants/theme';
 import { ReservationCard } from '@/components/ReservationCard';
 import { useAppStore } from '@/stores/app-store';
 import { Reservation } from '@/types/reservation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function DashboardScreen() {
+    const insets = useSafeAreaInsets();
     const { getTodayReservations, getReservationWithCake, reservations, updateReservation, dailyStats } = useAppStore();
     const todayReservations = getTodayReservations();
     const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
@@ -24,7 +26,7 @@ export default function DashboardScreen() {
         }
     };
 
-    const handleStatusChange = (newStatus: 'pending' | 'confirmed' | 'completed' | 'canceled') => {
+    const handleStatusChange = (newStatus: 'pending' | 'confirmed' | 'completed' | 'canceled' | 'delivered') => {
         if (selectedReservation) {
             updateReservation(selectedReservation.id, { status: newStatus });
             setShowStatusModal(false);
@@ -168,6 +170,15 @@ export default function DashboardScreen() {
                                         <Text style={styles.statusButtonText}>Completed</Text>
                                     </TouchableOpacity>
 
+                                    {selectedReservation.status === 'completed' && (
+                                        <TouchableOpacity
+                                            style={[styles.statusButton, { backgroundColor: '#0ab3ad' }]}
+                                            onPress={() => handleStatusChange('delivered')}
+                                        >
+                                            <Text style={styles.statusButtonText}>Delivered</Text>
+                                        </TouchableOpacity>
+                                    )}
+
                                     <TouchableOpacity
                                         style={[styles.statusButton, { backgroundColor: '#dc3545' }]}
                                         onPress={() => handleStatusChange('canceled')}
@@ -205,6 +216,7 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: theme.borderRadius.xl
     },
     headerContent: {
+        paddingTop: 18,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

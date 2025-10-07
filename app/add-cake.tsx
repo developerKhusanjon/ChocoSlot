@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
+    Image,
     StyleSheet,
     ScrollView,
     TextInput,
     TouchableOpacity,
     Alert,
-    Modal
+    Modal, ImageSourcePropType
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import { Image } from 'expo-image';
 import { ImageIcon, DollarSign, FileText, Tag, X, Grid, Clock } from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 import { useAppStore } from '@/stores/app-store';
+import { LOCAL_FOOD_IMAGES, FOOD_IMAGES } from '@/constants/images';
 
 export default function AddCakeScreen() {
     const { cakes, addCake, updateCake, reservations } = useAppStore();
@@ -22,37 +23,25 @@ export default function AddCakeScreen() {
     const isEditing = !!id;
     const existingCake = isEditing ? cakes.find(c => c.id === id) : null;
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        name: string;
+        description: string;
+        price: string;
+        image?: ImageSourcePropType;
+        category: string;
+        available: boolean;
+        status: 'available' | 'out-of-stock' | 'removing-from-stock';
+    }>
+    ({
         name: '',
         description: '',
         price: '',
-        image: '',
+        image: FOOD_IMAGES.fast,
         category: '',
         available: true,
-        status: 'available' as 'available' | 'out-of-stock' | 'removing-from-stock'
+        status: 'available'
     });
     const [showImageSelector, setShowImageSelector] = useState(false);
-
-    // Local cake images
-    const localCakeImages = [
-        { id: '1', name: 'Bliss', url: require('@/assets/foods/bliss.jpeg') },
-        { id: '2', name: 'Burger', url: require('@/assets/foods/burger.jpg') },
-        { id: '3', name: 'Cap', url: require('@/assets/foods/cap.webp') },
-        { id: '4', name: 'Coffee', url: require('@/assets/foods/coffee.webp') },
-        { id: '5', name: 'Delight', url: require('@/assets/foods/delight.jpeg') },
-        { id: '6', name: 'Drink', url: require('@/assets/foods/drink.webp') },
-        { id: '7', name: 'Fast Food', url: require('@/assets/foods/fast.jpg') },
-        { id: '8', name: 'Food', url: require('@/assets/foods/fd.jpg') },
-        { id: '9', name: 'Free', url: require('@/assets/foods/fr.jpg') },
-        { id: '10', name: 'Hot Dog', url: require('@/assets/foods/hotd.jpg') },
-        { id: '11', name: 'Pizza', url: require('@/assets/foods/pizza.jpeg') },
-        { id: '12', name: 'Rice', url: require('@/assets/foods/rice.webp') },
-        { id: '13', name: 'Shaurma', url: require('@/assets/foods/shaurma.jpg') },
-        { id: '14', name: 'Spaghetti', url: require('@/assets/foods/spagh.jpg') },
-        { id: '15', name: 'Steak', url: require('@/assets/foods/steak.webp') },
-        { id: '16', name: 'Vanilla', url: require('@/assets/foods/vanilla.jpeg') },
-        { id: '17', name: 'Water', url: require('@/assets/foods/water.jpg') },
-    ];
 
     useEffect(() => {
         if (existingCake) {
@@ -207,7 +196,7 @@ export default function AddCakeScreen() {
                             <Image
                                 source={formData.image}
                                 style={styles.previewImage}
-                                contentFit="cover"
+                                resizeMode="cover"
                             />
                         </View>
                     )}
@@ -281,7 +270,7 @@ export default function AddCakeScreen() {
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
                         <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Choose Cake Image</Text>
+                            <Text style={styles.modalTitle}>Choose Food Image</Text>
                             <TouchableOpacity
                                 style={styles.closeButton}
                                 onPress={() => setShowImageSelector(false)}
@@ -292,19 +281,19 @@ export default function AddCakeScreen() {
 
                         <ScrollView style={styles.imageGrid} showsVerticalScrollIndicator={false}>
                             <View style={styles.imageGridContainer}>
-                                {localCakeImages.map((image) => (
+                                {LOCAL_FOOD_IMAGES.map((image) => (
                                     <TouchableOpacity
                                         key={image.id}
                                         style={styles.imageOption}
                                         onPress={() => {
-                                            setFormData(prev => ({ ...prev, image: image.url }));
+                                            setFormData(prev => ({ ...prev, image: image.image }));
                                             setShowImageSelector(false);
                                         }}
                                     >
                                         <Image
-                                            source={image.url}
+                                            source={image.image}
                                             style={styles.imageOptionImage}
-                                            contentFit="cover"
+                                            resizeMode="cover"
                                         />
                                         <Text style={styles.imageOptionName}>{image.name}</Text>
                                     </TouchableOpacity>
@@ -538,22 +527,25 @@ const styles = StyleSheet.create({
         padding: theme.spacing.xs
     },
     imageGrid: {
-        flex: 1
+        maxHeight: 400
     },
     imageGridContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: theme.spacing.md
+        gap: theme.spacing.md,
+        paddingBottom: theme.spacing.lg
     },
     imageOption: {
-        width: '48%',
+        width: '47%',
         backgroundColor: theme.colors.surfaceVariant,
         borderRadius: theme.borderRadius.md,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        marginBottom: theme.spacing.sm
     },
     imageOptionImage: {
         width: '100%',
-        height: 120
+        height: 120,
+        backgroundColor: theme.colors.surfaceVariant
     },
     imageOptionName: {
         padding: theme.spacing.sm,

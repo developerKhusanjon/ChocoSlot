@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Info, Plus, Calendar, ChefHat, Clock, AlertCircle, FileX2 } from 'lucide-react-native';
+import {Info, Plus, Calendar, ChefHat, Clock, AlertCircle, FileX2, Citrus} from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 
 export default function InfoScreen() {
@@ -40,6 +40,22 @@ export default function InfoScreen() {
                     <Text style={styles.sectionText}>
                         Go to Menu tab and tap the + button to add new foods. Set name, price, description, and availability status.
                     </Text>
+                </View>
+
+                <View style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Citrus size={20} color={theme.colors.success} />
+                        <Text style={styles.sectionTitle}>Delivered Reservations</Text>
+                    </View>
+                    <Text style={styles.sectionText}>
+                        Tap on any reservation in Dashboard or Reservations tab to change its status to &quot;Delivered&quot;.
+                    </Text>
+                    <View style={styles.successNote}>
+                        <Clock size={16} color={theme.colors.success} />
+                        <Text style={styles.noteText}>
+                            Important: Only Completed orders can be delivered. Delivered items disappear after 30 seconds to keep the dashboard clean. You may revert the delivery status within this time if needed.
+                        </Text>
+                    </View>
                 </View>
 
                 <View style={styles.section}>
@@ -90,6 +106,9 @@ export default function InfoScreen() {
                     </Text>
                     <Text style={styles.sectionText}>
                         • Canceled reservations are automatically removed after 3 minutes
+                    </Text>
+                    <Text style={styles.sectionText}>
+                        • Delivered reservations are automatically removed after 30 seconds
                     </Text>
                     <View style={styles.importantNote}>
                         <FileX2 size={16} color={theme.colors.error} />
@@ -161,6 +180,15 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         gap: theme.spacing.sm,
         backgroundColor: theme.colors.cardPeach,
+        padding: theme.spacing.md,
+        borderRadius: theme.borderRadius.md,
+        marginTop: theme.spacing.sm
+    },
+    successNote: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        gap: theme.spacing.sm,
+        backgroundColor: theme.colors.cardGreen,
         padding: theme.spacing.md,
         borderRadius: theme.borderRadius.md,
         marginTop: theme.spacing.sm

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
+    Image,
     StyleSheet,
     ScrollView,
     TextInput,
@@ -10,10 +11,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
-import { Image } from 'expo-image';
 import { Calendar, Clock, User, Phone, MessageSquare, ChevronDown } from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 import { useAppStore } from '@/stores/app-store';
+import { LOCAL_FOOD_IMAGES, FOOD_IMAGES } from '@/constants/images';
 
 export default function AddReservationScreen() {
     const { cakes, addReservation, updateReservation, reservations } = useAppStore();
@@ -139,7 +140,7 @@ export default function AddReservationScreen() {
                                 <Image
                                     source={selectedCake.image}
                                     style={styles.cakeImage}
-                                    contentFit="cover"
+                                    resizeMode="cover"
                                 />
                                 <View style={styles.cakeInfo}>
                                     <Text style={styles.cakeName}>{selectedCake.name}</Text>
@@ -166,7 +167,7 @@ export default function AddReservationScreen() {
                                     <Image
                                         source={cake.image}
                                         style={styles.cakeOptionImage}
-                                        contentFit="cover"
+                                        resizeMode="cover"
                                     />
                                     <View style={styles.cakeOptionInfo}>
                                         <Text style={styles.cakeOptionName}>{cake.name}</Text>
@@ -279,6 +280,22 @@ export default function AddReservationScreen() {
                                     </Text>
                                 </TouchableOpacity>
                             ))}
+                            {existingReservation.status === 'completed' && (
+                                <TouchableOpacity
+                                    style={[
+                                        styles.statusButton,
+                                        { width: '100%' }
+                                    ]}
+                                    onPress={() => {
+                                        updateReservation(existingReservation.id, { status: 'delivered' });
+                                        Alert.alert('Success', 'Status updated to delivered!');
+                                    }}
+                                >
+                                    <Text style={styles.statusButtonText}>
+                                        Delivered
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
                         </View>
                     </View>
                 )}

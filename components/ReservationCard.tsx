@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Clock, User, Phone } from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 import { StatusBadge } from './StatusBadge';
 import { Reservation, Cake } from '@/types/reservation';
+import { LOCAL_FOOD_IMAGES, FOOD_IMAGES } from '@/constants/images';
 
 interface ReservationCardProps {
     reservation: Reservation;
@@ -35,7 +35,7 @@ export function ReservationCard({ reservation, cake, onPress }: ReservationCardP
                         <Image
                             source={cake.image}
                             style={styles.cakeImage}
-                            contentFit="cover"
+                            resizeMode="cover"
                         />
                     )}
                     <View style={styles.cakeDetails}>

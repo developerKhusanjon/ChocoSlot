@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '@/constants/theme';
 
 interface StatusBadgeProps {
-    status: 'pending' | 'confirmed' | 'completed' | 'canceled';
+    status: 'pending' | 'confirmed' | 'completed' | 'canceled' | 'delivered';
 }
 
 export function StatusBadge({ status }: StatusBadgeProps) {
@@ -32,6 +32,12 @@ export function StatusBadge({ status }: StatusBadgeProps) {
                     color: '#DC2626',
                     backgroundColor: '#FEE2E2',
                     text: 'Canceled'
+                };
+            case 'delivered':
+                return {
+                    color: '#059669',
+                    backgroundColor: '#D1FAE5',
+                    text: 'Delivered'
                 };
         }
     };

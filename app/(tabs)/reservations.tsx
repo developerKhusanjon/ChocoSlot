@@ -10,7 +10,7 @@ import { useAppStore } from '@/stores/app-store';
 export default function ReservationsScreen() {
     const insets = useSafeAreaInsets();
     const { reservations, getReservationWithCake } = useAppStore();
-    const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'canceled'>('all');
+    const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'canceled' | 'delivered'>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [showSearch, setShowSearch] = useState(false);
 
@@ -51,6 +51,7 @@ export default function ReservationsScreen() {
         { key: 'pending' as const, label: 'Pending', count: reservations.filter(r => r.status === 'pending').length },
         { key: 'confirmed' as const, label: 'Confirmed', count: reservations.filter(r => r.status === 'confirmed').length },
         { key: 'completed' as const, label: 'Completed', count: reservations.filter(r => r.status === 'completed').length },
+        { key: 'delivered' as const, label: 'Delivered', count: reservations.filter(r => r.status === 'delivered').length },
         { key: 'canceled' as const, label: 'Canceled', count: reservations.filter(r => r.status === 'canceled').length }
     ];
 
@@ -64,9 +65,6 @@ export default function ReservationsScreen() {
                         onPress={() => setShowSearch(!showSearch)}
                     >
                         <Search size={20} color={theme.colors.onSurface} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.iconButton}>
-                        <Filter size={20} color={theme.colors.onSurface} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -100,7 +98,7 @@ export default function ReservationsScreen() {
                 <View style={styles.searchContainer}>
                     <TextInput
                         style={styles.searchInput}
-                        placeholder="Search by customer name, contact, cake, or notes..."
+                        placeholder="Search by customer name, contact, food, or notes..."
                         value={searchQuery}
                         onChangeText={setSearchQuery}
                         placeholderTextColor={theme.colors.onSurfaceVariant}
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.surfaceVariant
     },
     filterContainer: {
-        maxHeight: 60
+        maxHeight: 66
     },
     filterContent: {
         paddingHorizontal: theme.spacing.lg,

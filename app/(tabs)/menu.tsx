@@ -52,20 +52,20 @@ export default function MenuScreen() {
     const handleDeleteCake = (cakeId: string, canDelete: boolean, reservationCount: number) => {
         if (!canDelete) {
             Alert.alert(
-                'Cannot Delete Cake',
-                `This cake has ${reservationCount} reservation(s) and cannot be deleted. Please complete or cancel all reservations first.`,
+                'Cannot Delete Food',
+                `This food has ${reservationCount} reservation(s) and cannot be deleted. Please complete or cancel all reservations first.`,
                 [{ text: 'OK' }]
             );
             return;
         }
 
         Alert.alert(
-            'Delete Cake',
-            'Are you sure you want to delete this cake? This action cannot be undone.',
+            'Delete Food',
+            'Are you sure you want to delete this food? This action cannot be undone.',
             [
-                { text: 'Keep Cake', style: 'cancel' },
+                { text: 'Keep Food', style: 'cancel' },
                 {
-                    text: 'Delete Cake',
+                    text: 'Delete Food',
                     style: 'destructive',
                     onPress: () => {
                         deleteCake(cakeId);
@@ -87,7 +87,7 @@ export default function MenuScreen() {
     return (
         <View style={styles.container}>
             <View style={[styles.header, { paddingTop: insets.top + theme.spacing.md }]}>
-                <Text style={styles.title}>Cake Menu</Text>
+                <Text style={styles.title}>Food Menu</Text>
                 <View style={styles.headerActions}>
                     <TouchableOpacity
                         style={styles.iconButton}
@@ -144,15 +144,15 @@ export default function MenuScreen() {
 
                 {cakes.length === 0 && (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyTitle}>No cakes in menu</Text>
+                        <Text style={styles.emptyTitle}>No foods in menu</Text>
                         <Text style={styles.emptyDescription}>
-                            Start building your cake menu by adding your first cake.
+                            Start building your food menu by adding your first food.
                         </Text>
                         <TouchableOpacity
                             style={styles.addButton}
                             onPress={handleAddCake}
                         >
-                            <Text style={styles.addButtonText}>Add First Cake</Text>
+                            <Text style={styles.addButtonText}>Add First Food</Text>
                         </TouchableOpacity>
                     </View>
                 )}

@@ -14,7 +14,10 @@
   },
   "ios": {
     "supportsTablet": true,
-    "bundleIdentifier": "app.dishly.dishly-food-reservation-manager"
+    "bundleIdentifier": "app.dishly.dishly-food-reservation-manager",
+    "infoPlist": {
+      "ITSAppUsesNonExemptEncryption": false
+    }
   },
   "android": {
     "adaptiveIcon": {
@@ -37,5 +40,16 @@
   "experiments": {
     "typedRoutes": true
   },
-  "owner": "khusanjon"
+  "owner": "khusanjon",
+  "extra": {
+    "router": {
+      "origin": "https://rork.com/"
+    },
+    "eas": {
+      "projectId": "ce71135d-a0cf-4d89-9e20-8789277c6d3a"
+    }
+  },
+  "assetBundlePatterns": [
+    "assets/**/*"
+  ]
 }

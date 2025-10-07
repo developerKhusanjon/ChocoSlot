@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { MoreVertical } from 'lucide-react-native';
 import { theme } from '@/constants/theme';
 import { Cake } from '@/types/reservation';
+import { LOCAL_FOOD_IMAGES, FOOD_IMAGES } from '@/constants/images';
 
 interface CakeCardProps {
     cake: Cake;
@@ -18,7 +18,7 @@ export function CakeCard({ cake, onPress, onMenuPress }: CakeCardProps) {
                 <Image
                     source={cake.image}
                     style={styles.image}
-                    contentFit="cover"
+                    resizeMode="cover"
                 />
                 <TouchableOpacity style={styles.menuButton} onPress={onMenuPress}>
                     <MoreVertical size={20} color={theme.colors.onSurface} />

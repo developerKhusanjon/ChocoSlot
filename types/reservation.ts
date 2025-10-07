@@ -1,3 +1,5 @@
+import {ImageSourcePropType} from "react-native";
+
 export interface Reservation {
     id: string;
     customerName: string;
@@ -7,7 +9,7 @@ export interface Reservation {
     pickupTime: string;
     quantity: number;
     notes?: string;
-    status: 'pending' | 'confirmed' | 'completed' | 'canceled';
+    status: 'pending' | 'confirmed' | 'completed' | 'canceled' | 'delivered';
     createdAt: string;
     updatedAt?: string;
 }
@@ -17,7 +19,7 @@ export interface Cake {
     name: string;
     description: string;
     price: number;
-    image: string;
+    image: ImageSourcePropType;
     available: boolean;
     category: string;
     status?: 'available' | 'out-of-stock' | 'removing-from-stock';

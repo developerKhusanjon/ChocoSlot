@@ -3,63 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import createContextHook from '@nkzw/create-context-hook';
 import { Reservation, Cake } from '@/types/reservation';
 
-const mockCakes: Cake[] = [
-    {
-        id: '1',
-        name: 'Chocolate Delight',
-        description: 'Rich chocolate cake with ganache',
-        price: 25.99,
-        image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400',
-        available: true,
-        category: 'Chocolate'
-    },
-    {
-        id: '2',
-        name: 'Vanilla Dream',
-        description: 'Classic vanilla sponge with buttercream',
-        price: 22.99,
-        image: 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400',
-        available: true,
-        category: 'Vanilla'
-    },
-    {
-        id: '3',
-        name: 'Strawberry Bliss',
-        description: 'Fresh strawberry cake with cream',
-        price: 28.99,
-        image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400',
-        available: true,
-        category: 'Fruit'
-    }
-];
-
-const mockReservations: Reservation[] = [
-    {
-        id: '1',
-        customerName: 'Sarah Johnson',
-        contact: '+1 234 567 8901',
-        cakeId: '1',
-        pickupDate: new Date().toISOString().split('T')[0],
-        pickupTime: '14:30',
-        quantity: 1,
-        notes: 'Happy Birthday Sarah!',
-        status: 'confirmed',
-        createdAt: new Date().toISOString()
-    },
-    {
-        id: '2',
-        customerName: 'Mike Chen',
-        contact: 'mike@email.com',
-        cakeId: '2',
-        pickupDate: new Date().toISOString().split('T')[0],
-        pickupTime: '16:00',
-        quantity: 2,
-        notes: '',
-        status: 'pending',
-        createdAt: new Date().toISOString()
-    }
-];
-
 export const [AppProvider, useAppStore] = createContextHook(() => {
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [cakes, setCakes] = useState<Cake[]>([]);
@@ -78,14 +21,10 @@ export const [AppProvider, useAppStore] = createContextHook(() => {
 
                 if (storedReservations) {
                     setReservations(JSON.parse(storedReservations));
-                } else {
-                    setReservations(mockReservations);
                 }
 
                 if (storedCakes) {
                     setCakes(JSON.parse(storedCakes));
-                } else {
-                    setCakes(mockCakes);
                 }
 
                 // Load or initialize daily stats
@@ -106,9 +45,6 @@ export const [AppProvider, useAppStore] = createContextHook(() => {
                     AsyncStorage.setItem('dailyStats', JSON.stringify(newStats));
                 }
             } catch (error) {
-                console.error('Error loading data from AsyncStorage:', error);
-                setReservations(mockReservations);
-                setCakes(mockCakes);
                 const today = new Date().toISOString().split('T')[0];
                 setDailyStats({ date: today, canceled: 0, today: 0, pending: 0, confirmed: 0 });
             } finally {
@@ -146,7 +82,7 @@ export const [AppProvider, useAppStore] = createContextHook(() => {
         }
     }, [dailyStats, isLoaded]);
 
-    // Auto-remove canceled reservations after 3 minutes
+    // Auto-remove canceled reservations after 3 minutes and delivered reservations after 30 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date();
@@ -158,11 +94,17 @@ export const [AppProvider, useAppStore] = createContextHook(() => {
                         const minutesDiff = timeDiff / (1000 * 60);
                         return minutesDiff < 3; // Keep if less than 3 minutes
                     }
+                    if (reservation.status === 'delivered') {
+                        const deliveredTime = new Date(reservation.updatedAt || reservation.createdAt);
+                        const timeDiff = now.getTime() - deliveredTime.getTime();
+                        const secondsDiff = timeDiff / 1000;
+                        return secondsDiff < 30; // Keep if less than 30 seconds
+                    }
                     return true;
                 });
                 return filtered;
             });
-        }, 30000); // Check every 30 seconds
+        }, 5000); // Check every 30 seconds
 
         return () => clearInterval(interval);
     }, []);
